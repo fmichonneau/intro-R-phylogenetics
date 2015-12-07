@@ -1,0 +1,337 @@
+---
+title: An introduction to R for phylogenetics
+author: François Michonneau
+date: December 7th, 2015
+output: pdf_document
+---
+
+# Introduction
+
+## Why R?
+
+Are you working on more than 100 species? Are you going to analyze more than 3
+markers? Are you going to report bootstrap values on a tree with hundreds of
+nodes? If you answer "yes" to any of these questions, you're going to need the
+help of a computer to keep your sanity.
+
+Learning a programming language is not easy. However, the benefits of your time
+investment will be higher than you can imagine. For instance, it will give you
+new perspectives on the kind of analyses you'll be able to perform. You'll also
+be able to tailor the methods you want to use to your specific questions instead
+of being constrained by the way the author of a software package designed them.
+
+R is a really popular programming language because it can input and output many
+type of data, it's really robust, it has great analytical and graphical
+capabilities built-in, and there is a huge community of users willing to help.
+
+The goal of this short handout is to show you some basic examples of data
+manipulation. I hope these short general examples will spark your interest to
+learn more about R as a programming language. I prefer not to cover specific
+methods that might be applicable to just a small group of people, but instead
+give a quick overview of basic functionalities that can be applied to data
+management and manipulation, something everybody struggles with.
+
+## What is R?
+
+R is both a programming language and an environment for statistical and
+graphical analysis. It is open-source (you can use it for free, you can look at
+the source code, you can modify it, you can redistribute it) and cross-platform
+(you can use it on any computer).
+
+R is very flexible and its functionalities can be extended with its package
+system. R is used to analyze data of any kind (biological, geographical,
+medical, financial) and of almost any size.
+
+Users interact with R by writing commands. Each command uses one or more
+functions, and a set of commands forms a script. It's also very easy to write
+your own functions, and you may incorporate them within your scripts.
+
+
+## Advantages of using R
+
+### Reproducibility
+
+One of the main advantages of R is that **reproducibility** is built-in. The
+system of scripts makes it easy to reproduce all the steps used in your
+analysis. In a point-and-click application, it might be hard to remember which
+options you used in your analyses. With R, you can keep track of all the steps
+you used. R also allows you to automate many repetitive tasks. For instance, if
+you get new samples and you want to re-run an analysis to include them, with R
+you will just need to update your original dataset and re-run the scripts you
+wrote when your dataset was smaller.
+
+### Sharing
+
+The reproducibility also allows you to share your scripts easily. If you provide
+the data you used and your script to someone else, then your collaborator will
+be able to obtain the exact same results. This is even made easier in R as it's
+cross-platform (you don't have to worry if your collaborator will be using a
+Mac, a PC or a linux computer) and also it does not require your collaborator to
+buy an expansive piece of software.
+
+### Integration
+
+Because R is versatile, it can also be used at each step of the work flow. R can
+import and export data in many different formats. Developing methods under a
+single user interface greatly facilitates their integration and
+inter-operability. Furthermore, because R can interact with many programming
+languages, developers can use the language that is best suited for the software
+they develop, while users do not have to learn a new interface.
+
+R has a steep learning curve but investing time and energy to learn it is very
+worthwhile. R allows you to manage, rename, subset, bind data sets in a few
+commands. As data sets become larger, doing this kind of operations by hand
+would take hours and it would be easy to introduce mistakes that would not
+necessarily be noticed.
+
+
+
+## Getting started
+
+### Where do I get R?
+
+R can be downloaded from the R-project website: <http://www.r-project.org/>.
+
+I also encourage you to install RStudio <https://rstudio.com/>.
+
+### Where do I find help?
+
+As R is becoming prevalent there are a number of resources that have been
+developed to help new users getting started.
+
+For general help:
+
+* **[R for cats](http://rforcats.net/)** an excellent overview to get started.
+* **[An introduction to R](http://cran.r-project.org/doc/manuals/R-intro.pdf)**
+  A comprehensive and easy-to-follow tutorial produced by the R Development Core
+  Team (i.e., the people who are writing R). There are other manuals available,
+  some of them are not for beginners but are full of useful information once you
+  know your way around R.
+* **[R for Beginners](http://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf)**
+   A tutorial by Emmanuel Paradis.
+* **[The R FAQ](http://cran.r-project.org/doc/FAQ/R-FAQ.html)**
+
+Courses:
+
+* **[R programming for biologists](http://r-bio.github.io)**
+* **[R lessons](http://www.datacarpentry.org/R-ecology/)** from Data Carpentry
+
+
+
+For help about phylogenetics and comparative methods in R:
+
+* Phylogenetic Comparative Methods Wiki Tutorials and overview of methods
+  available in R for phylogenetic comparative analysis. The wiki grew out of a
+  Hackathon on Comparative Methods in R held at the National Evolutionary
+  Synthesis Center (NESCent) 10-14 December 2007.  <http://www.r-phylo.org/>
+* Analysis of Phylogenetics and Evolution with R A book written by Paradis.
+  This book is a very useful reference on how to do evolutionary analyses using
+  the `ape` package, written by its maintainer. It is available from Springer
+  and Amazon.
+* The Bodega workshop on phylogenetics and comparative methods in R.
+  <http://bodegaphylo.wikispot.org/Phylogenetics_and_Comparative_Methods_in_R>
+* The R-sig-phylo mailing list:
+  <https://stat.ethz.ch/mailman/listinfo/r-sig-phylo>. Even Felsenstein is on it
+  and he replies to any questions about comparative methods in less than 5
+  minutes usually!
+
+
+### R basics
+
+Being organized when using R is particularly important. When you import local
+files, R looks for them in what is called the *working directory*. The best
+way to work with R is thus to have a different directory for each analysis which
+contains all the files that you will need.
+
+In R, the command line starts with the symbol `>`. After typing a command, you
+can execute it by pressing `Enter`. If the command is incomplete, the command
+entry is continued on the following line which then starts with the symbol
+`+`. R is nonsensitive to space characters (e.g., spaces, tab, new lines) but
+it's case sensitive (e.g, `Hello` and `hello` are different variable names). To
+assign a value to a variable, you need to use the symbols `<-` (`Alt+-` in
+RStudio). In R, the comment character is `#`, R ignore anything found after it.
+
+Let's take a look at a small example to understand how to use functions and
+variables.
+
+```{r, keep.source=TRUE}
+## This creates a variable (x) which contains number 0 to 10
+x <- 0:10
+## Just typing the name of the variable gives you its content
+x
+## Let's calculate the mean value of the numbers from 0 to 10
+mean(x)
+## It's also possible to store the value of the mean in a
+## new variable
+y <- mean(x)
+## You can do operations on variables, for instance
+y + 1
+y * 3
+z <- y^2
+z
+```
+
+With R it's also possible, in some cases, to directly create or change
+attributes of a variable. Here is an example where we use species names as
+attributes for data about the length of a group of species.
+
+```{r, keep.source=TRUE}
+## Let's create a vector of 5 elements: the species names
+## of our group
+spNames <- c("edulis", "impatiens", "atra", "coluber", "fuscopunctata")
+spNames
+## Let's now assume that we have measurements for
+## each of these species (in cm)
+spLength <- c(12, 8, 23, 37, 42)
+spLength
+## Now we are going to use the species names as an attribute
+## of the length of these species
+names(spLength) <- spNames
+## Let's have a look at the result
+spLength
+```
+
+Note that we used `"` on each side of our species names. Otherwise, R would
+have interpreted them as variable names (`y` was a variable name in the
+previous example), and because they don't exist (we didn't define them) we would
+have gotten an error message.
+
+Now, let's say that we would like to add the first letter of the genus name to
+these species names. We could do this in two ways. We could first recreate the
+`spNames` vector with the new names, but R allows you to do this much more
+efficiently:
+
+```{r, keep.source=TRUE}
+newSpNames <- paste("H.", spNames, sep="")
+newSpNames
+names(spLength) <- newSpNames
+spLength
+```
+
+With only 5 species you could have done it pretty quickly by hand, but imagine
+all the time this would have saved you if you had 1,000 species to rename.
+
+Now, imagine that in addition of length data, we also have the depth (in meters)
+at which all these species live and their colors. We can store all
+these data in R in a particular class of object called a data frame.
+
+```{r, keep.source=TRUE}
+dataSp <- data.frame(spLength,
+                     spColors=c("pink", "purple", "black", "black", "brown"),
+                     spDepth=c(12, 2, 1, 1, 15))
+rownames(dataSp) <- newSpNames
+dataSp
+```
+
+An important aspect of data manipulation is sub-setting. Using the square
+brackets allows you to select one or more elements of a vector. Here are some
+examples:
+
+```{r, keep.source=TRUE}
+## Sub-setting one element of a vector using a numeric index:
+spLength[2]
+## Sub-setting one element of a vector using its name:
+spLength["H.edulis"]
+## Sub-setting several elements of a vector:
+spLength[c(1,3)]
+spLength[2:4]
+## Sub setting from a data frame:
+## the first element is the row index,
+## the second the column index
+dataSp[1,3]
+dataSp["H.atra", "spDepth"]
+dataSp["H.impatiens", ]
+```
+
+In the latter case we left the second dimension empty, so all columns are
+returned.
+
+# Importing and exporting data
+
+The main purpose of R is to import your data to manipulate and analyze it. In
+this section we will (1) import data, (2) manipulate them to create a new
+dataset, (3) export this new dataset.
+
+We'll use two datasets. One has the size of three color morphs in a species
+complex (`lengthData`), the other has the depth at which the individuals
+were found (`depthData`). The individuals in each case are uniquely
+identified by a number, their `fieldID`. We are going to merge these two
+data frames together and export the result into a new file.
+
+```{r, keep.source=TRUE}
+## Load into memory two datasets, stored as CSV files
+lengthData <- read.csv(file="http://goo.gl/pHweF")
+depthData <- read.csv(file="http://goo.gl/Vc4Ov")
+## We can inspect the beginning of these two files with the
+## head() function
+head(lengthData)
+head(depthData)
+## Let's merge them
+combinedData <- merge(lengthData, depthData, by="fieldID", all=TRUE)
+## Let's look at the result
+head(combinedData)
+## We can now export it, this will create the 'combinedData.csv'
+## in your working directory
+write.csv(combinedData, file="combinedData.csv")
+```
+
+
+
+# The R packaging system
+
+You can extend the "basic" functionalities offered natively by R, by installing
+packages. As of today, there are 7581 packages available. You can install
+packages from the R GUI, or if you know the name of the package you want to
+install (in this example the package `ape`), you can type at the command line:
+
+```{r, eval=FALSE}
+install.packages("ape")
+```
+
+By default, you will download the packages from one of the CRAN (Comprehensive R
+Archive Network) mirrors. Mirrors are identical copies of a given website. They
+reduce the load on individual servers, and users can enjoy faster connections by
+using a server located in their geographical area. When asked to choose a CRAN
+mirror, just pick one located in the US.
+
+```{r, eval=FALSE}
+install.packages("phylobase")
+```
+
+# R packages for phylogenetics
+
+The number of R packages that have been developed for phylogenetics has been
+increasing rapidly recently. Below is the list of some of the main packages. You
+can find a more comprehensive list on the
+[CRAN Task View page](http://cran.r-project.org/web/views/Phylogenetics.html).
+
+
+* **`ape`**: (Analysis of Phylogenetics and Evolution) is maintained by Emmanuel
+  Paradis. It's the most comprehensive package for phylogenetics. It provides
+  functions to import data (sequences and trees) in various formats (e.g.,
+  phylip, nexus, newick, genbank). There are a few functions to infer
+  phylogenies within R (neighbor-joining and maximum likelihood with
+  phyML). `ape` can be used for tree manipulation (pruning and grafting) and
+  display. `ape` implements various methods for comparative and diversification
+  analyses as well as ancestral state reconstruction.
+
+* **`phylobase`**: This package provides a common suite of basic functions for
+  manipulating and storing trees and data. As `ape`, it provides functions for
+  importing tree (from NEXUS and Newick files) and pruning trees. The objects
+  are stored in a S4 class which provides validation on the objects, so the user
+  can't mess them up. The functions for tree manipulation are faster than in
+  `ape`. The main advantage of `phylobase` is that it allows the user to
+  manipulate easily data associated with tips or nodes of a tree, which
+  facilitates the implementation of comparative methods.
+
+* **`seqinr`**: Seqinr provides a lot of functions to manipulate and analyze
+  sequence data. It can import sequences from a variety of formats, converts
+  nucleotides to amino-acids, etc.
+
+* **`picante`** picante provides various tools and methods for community
+phylogenetics, including an interface with phylocom.
+
+* **`geiger`** Geiger provides functions to use comparative methods in the
+context of adaptive radiations
+
+* **`bamm`** can be used for diversification analyses.
