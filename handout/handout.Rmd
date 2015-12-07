@@ -315,6 +315,9 @@ can find a more comprehensive list on the
   display. `ape` implements various methods for comparative and diversification
   analyses as well as ancestral state reconstruction.
 
+* **`phytools`** has many functions to perform ancestral reconstructions,
+  diversification analyses, plotting, and a lot more.
+
 * **`phylobase`**: This package provides a common suite of basic functions for
   manipulating and storing trees and data. As `ape`, it provides functions for
   importing tree (from NEXUS and Newick files) and pruning trees. The objects
